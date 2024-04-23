@@ -5,7 +5,7 @@ import React from 'react';
 function HomePage() {
   return (
     <div className="">
-      <NavBar />;
+      <NavBar />
       <Lan /> {/* Fixed component name */}
     </div>
   );
