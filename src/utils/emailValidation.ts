@@ -6,3 +6,10 @@ export const emailValidation = async (email: string) => {
 
   return emails.includes(email) ? true : false;
 };
+
+export const testEmailValidation = async (email: string) => {
+  const user = await db.collection('testUsers').get();
+  const emails = user.docs.map((doc) => doc.data().testEmail);
+
+  return emails.includes(email) ? true : false;
+};

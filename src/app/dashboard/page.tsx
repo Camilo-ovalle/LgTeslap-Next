@@ -4,26 +4,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { SideBar } from '@/components/SideBar';
+import { useAppContext } from '@/context/appContext';
 import { GoAlertFill } from 'react-icons/go';
+import { set } from 'zod';
 
 function Dashboard() {
-  const [user, setUser] = useState([]);
-
-  useEffect(() => {
-    const info = async () => {
-      try {
-        const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/users',
-        );
-        setUser(response.data);
-        console.log(user);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    info();
-  }, []);
+  const { data } = useAppContext();
+  const { testEmail, services } = data;
 
   return (
     <div className="flex bg-gray-50">
@@ -33,7 +20,7 @@ function Dashboard() {
           <div className="w-full p-10">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
               <div className="p-4">
-                <p className="text-2xl text-gray-800 font-bold">Jane Doe</p>
+                <p className="text-2xl text-gray-800 font-bold">{testEmail}</p>
                 <p className="text-gray-600">
                   Software Engineer at Example Corp
                 </p>
@@ -85,7 +72,7 @@ function Dashboard() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <span className="text-2xl leading-none align-baseline">
-                      {user.length}
+                      {services.length}
                     </span>
                     <h3 className="text-lg font-medium text-gray-700">
                       Number of Services
@@ -149,42 +136,28 @@ function Dashboard() {
                     </tr>
                   </thead>
                   <tbody className="bg-white">
-                    {user.map((user) => (
-                      <tr key={user.id}>
-                        <td className="pl-12 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                          {user.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                          {user.username}
-                        </td>
-                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-green-500">
-                          Active
-                        </td>
-                        <td className="pl-16 whitespace-no-wrap text-sm leading-7 text-red-500">
-                          <button onClick={() => alert('Click')}>
-                            <GoAlertFill />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-
-                    {/* <tr>
-                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                        John Doe
-                      </td>
-                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                        Software Engineer
-                      </td>
-                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-green-500">
-                        Active
-                      </td>
-                      <td className="pl-10 whitespace-no-wrap text-sm leading-7 text-red-500">
-                        <button onClick={() => info()}>
-                          <GoAlertFill />
-                        </button>
-                      </td>
-                    </tr> */}
-                    {/* Más filas aquí */}
+                    {services.map(
+                      (user: { id?: string; description?: string }) => {
+                        return (
+                          <tr key={(user as { id: string }).id}>
+                            <td className="pl-12 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                              {(user as { id: string }).id}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                              {(user as { description: string }).description}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-green-500">
+                              {(user as { Status: string }).Status}
+                            </td>
+                            <td className="pl-16 whitespace-no-wrap text-sm leading-7 text-red-500">
+                              <button onClick={() => alert('Click')}>
+                                <GoAlertFill />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      },
+                    )}
                   </tbody>
                 </table>
               </div>

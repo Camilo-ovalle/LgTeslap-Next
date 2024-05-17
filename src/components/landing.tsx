@@ -1,6 +1,27 @@
-import React from 'react';
+'use client';
+import { FormEvent } from 'react';
+import { useAppContext } from '@/context/appContext';
+import { GoTab } from 'react-icons/go';
 
 function landing() {
+  const { register } = useAppContext();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      const res = await register({
+        testEmail: formData.get('testEmail'),
+      });
+
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <section className="bg-white dark:bg-gray-900">
@@ -10,11 +31,34 @@ function landing() {
               LgTeslap Service manager
             </h2>
             <p className="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero
-              quasi placeat omnis maxime, dolor vero exercitationem cum
-              mollitia, quae rem nostrum voluptates aperiam molestias ipsam
-              quidem repudiandae laboriosam ipsa pariatur.
+              "LgTeslap" is a personalized transportation company based in
+              Bogotá that offers a comprehensive range of services for
+              transporting individuals. The company is in need of a tool to
+              assist in managing information related to their clients and
+              services.
             </p>
+            <div className="flex items-center justify-center">
+              <form
+                onSubmit={handleSubmit}
+                className="w-4/6 flex flex-col justify-center items-center"
+                action=""
+              >
+                <h3 className="mb-4 text-2xl font-semibold">
+                  Geta free test using your email
+                </h3>
+                <div className="flex items-center justify-center w-full rounded-full border border-gray-100 shadow dark:border-gray-600">
+                  <input
+                    className="h-10 w-full decoration-none px-4 rounded-l-full bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-0 "
+                    type="text"
+                    name="testEmail"
+                    id="testEmail"
+                  />
+                  <button className="h-9 w-9 rounded-full flex items-center justify-center text-secondary-900">
+                    <GoTab />
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
           <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
             <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
@@ -112,12 +156,6 @@ function landing() {
                   </span>
                 </li>
               </ul>
-              <a
-                href="#"
-                className="text-white  bg-secondary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-              >
-                Get started
-              </a>
             </div>
             <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
               <h3 className="mb-4 text-2xl font-semibold">
@@ -216,12 +254,6 @@ function landing() {
                   </span>
                 </li>
               </ul>
-              <a
-                href="#"
-                className="text-white  bg-secondary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-              >
-                Get started
-              </a>
             </div>
             <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
               <h3 className="mb-4 text-2xl font-semibold">Enterprise focus</h3>
@@ -319,12 +351,6 @@ function landing() {
                   </span>
                 </li>
               </ul>
-              <a
-                href="#"
-                className="text-white bg-secondary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-              >
-                Get started
-              </a>
             </div>
           </div>
         </div>
