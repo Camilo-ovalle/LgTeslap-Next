@@ -39,6 +39,8 @@ function Dashboard() {
 
     const description = formData.get('description') as string;
 
+    if (!description) return toast.warning('Description is required');
+
     const newService = {
       id: getRandomId(1, 1000),
       description: description,
@@ -56,6 +58,9 @@ function Dashboard() {
     const formData = new FormData(e.currentTarget);
     const id = formData.get('id') as string;
     const description = formData.get('description') as string;
+
+    if (!id || !description)
+      return toast.warning('ID and description are required');
 
     let serviceFound = false;
 
