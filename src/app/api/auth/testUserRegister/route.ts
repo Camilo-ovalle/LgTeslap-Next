@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { randomUUID } from 'crypto';
+import { cookies } from 'next/headers';
+import { getRandomId } from '@/utils/getRandomID';
 
 import { db } from '@/libs/connection';
 import { services } from '@/utils/services';
@@ -17,8 +18,6 @@ export const POST = async (request: Request) => {
 
       const fullData = data.find((doc) => doc.testEmail === testEmail);
 
-      console.log(fullData);
-
       return NextResponse.json({
         message: `The email ${testEmail} already exists`,
         testEmail: fullData?.testEmail,
@@ -26,11 +25,20 @@ export const POST = async (request: Request) => {
       });
     }
     const testUser = {
+      id: getRandomId(1, 50000),
       testEmail: testEmail,
       services: services,
     };
 
-    await db.collection('testUsers').doc(testUser.testEmail).set(testUser);
+    await db.collection('testUsers').doc(testUser.id).set(testUser);
+
+    // Set the cookie
+    const cookie = cookies();
+    cookie.set('testUser', JSON.stringify(testUser), {
+      path: '/',
+      maxAge: 3600,
+      httpOnly: false, // Set to true if you don't want it accessible via client-side JavaScript
+    });
 
     return NextResponse.json({
       success: 'Register successful',
@@ -46,8 +54,4 @@ export const POST = async (request: Request) => {
       { status: 400 },
     );
   }
-};
-
-export const GET = async () => {
-  return NextResponse.json({ message: 'GET request' });
 };

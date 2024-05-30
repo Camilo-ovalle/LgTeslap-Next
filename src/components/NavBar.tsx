@@ -12,11 +12,11 @@ function NavBar() {
         </a>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <a
-            href="/login"
+            href="/register"
             type="submit"
             className="text-primary-50 bg-secondary-600 hover:bg-secondary-700 focus:ring-4 focus:outline-none focus:ring-secondary-400 font-medium rounded-lg text-sm px-8 py-4 text-center dark:bg-secondary-600 dark:hover:bg-secondary-700 dark:focus:ring-secondary-400"
           >
-            Sing In
+            Join wait list
           </a>
         </div>
         <div

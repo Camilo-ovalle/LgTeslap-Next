@@ -1,22 +1,97 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { useState, useEffect, FormEvent } from 'react';
 import { SideBar } from '@/components/SideBar';
 import { useAppContext } from '@/context/appContext';
+import { getStatusClass } from '@/utils/getStatusClass';
+import { getRandomId } from '@/utils/getRandomID';
+import { Toaster, toast } from 'sonner';
 import { GoAlertFill } from 'react-icons/go';
-import { set } from 'zod';
+import { useRouter } from 'next/navigation';
 
 function Dashboard() {
   const { data } = useAppContext();
-  const { testEmail, services } = data;
+  // const { testEmail, services } = data;
+  const router = useRouter();
+
+  if (!data) {
+    router.push('/404');
+  }
+
+  interface Service {
+    id: any;
+    description: any;
+    Status: any;
+  }
+
+  const [testEmail, setTestEmail] = useState('');
+  const [services, setServices] = useState<Service[]>([]);
+
+  useEffect(() => {
+    setTestEmail(data.testEmail);
+    setServices(data.services);
+  }, []);
+
+  const handleCreateService = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    const description = formData.get('description') as string;
+
+    const newService = {
+      id: getRandomId(1, 1000),
+      description: description,
+      Status: 'ACTIVE',
+    };
+
+    setServices([...services, newService]);
+
+    toast.success('Service added successfully');
+  };
+
+  const handleUpdateService = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const id = formData.get('id') as string;
+    const description = formData.get('description') as string;
+
+    let serviceFound = false;
+
+    const updatedServices = services.map((service) => {
+      if (service.id === id) {
+        serviceFound = true;
+        toast.success('Service updated successfully');
+        return {
+          ...service,
+          description,
+        };
+      }
+      return service;
+    });
+
+    if (!serviceFound) {
+      toast.warning('Service not found');
+    }
+
+    setServices(updatedServices);
+  };
+
+  const handleDeleteService = async (id: any) => {
+    const updatedServices = services.filter((service) => service.id !== id);
+
+    setServices(updatedServices);
+
+    toast.error('Service deleted successfully');
+  };
 
   return (
     <div className="flex bg-gray-50">
       <SideBar />
       <div className="w-full border-l border-gray-300">
-        <section className="w-full h-auto " id="Profile">
+        <Toaster position="top-right" richColors closeButton />
+        <section className="w-full h-auto" id="Profile">
           <div className="w-full p-10">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
               <div className="p-4">
@@ -24,7 +99,7 @@ function Dashboard() {
                 <p className="text-gray-600">
                   Software Engineer at Example Corp
                 </p>
-                <p className="text-gray-600">jane.doe@example.com</p>
+                <p className="text-gray-600">{testEmail}</p>
               </div>
               <div className="p-4 border-t border-gray-300 text-gray-600">
                 <div className="flex justify-between">
@@ -59,6 +134,63 @@ function Dashboard() {
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.
                     </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="w-full h-auto">
+          <div className="px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+              <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 w-full ">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0 w-full">
+                    <form onSubmit={handleCreateService}>
+                      <h3 className="text-lg font-medium text-gray-700">
+                        Add a new service
+                      </h3>
+                      <div className="flex justify-center items-center">
+                        <input
+                          className="h-10 w-full decoration-none bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-0 "
+                          placeholder="Add the description for your new service"
+                          type="text"
+                          name="description"
+                        />
+                        <button className="text-primary-50 bg-secondary-600 hover:bg-secondary-700 focus:ring-4 focus:outline-none focus:ring-secondary-400 font-medium rounded-lg text-sm px-8 py-4 text-center dark:bg-secondary-600 dark:hover:bg-secondary-700 dark:focus:ring-secondary-400">
+                          ADD
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {/* //update service */}
+              <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0 w-full">
+                    <form onSubmit={handleUpdateService}>
+                      <h3 className="text-lg font-medium text-gray-700">
+                        Update an existing service
+                      </h3>
+                      <div className="flex justify-between items-center">
+                        <input
+                          className="h-10 w-fit pr-5 decoration-none bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-0 "
+                          placeholder="service ID"
+                          type="text"
+                          name="id"
+                        />
+                        <input
+                          className="h-10 pl-5 w-full decoration-none bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-0 "
+                          placeholder="Add a new description"
+                          type="text"
+                          name="description"
+                        />
+                        <button className="text-primary-50 bg-secondary-600 hover:bg-secondary-700 focus:ring-4 focus:outline-none focus:ring-secondary-400 font-medium rounded-lg text-sm px-8 py-4 text-center dark:bg-secondary-600 dark:hover:bg-secondary-700 dark:focus:ring-secondary-400">
+                          ADD
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -122,7 +254,7 @@ function Dashboard() {
                   <thead>
                     <tr>
                       <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                        Oder ID
+                        Order ID
                       </th>
                       <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                         Description
@@ -137,20 +269,30 @@ function Dashboard() {
                   </thead>
                   <tbody className="bg-white">
                     {services.map(
-                      (user: { id?: string; description?: string }) => {
+                      (user: {
+                        id?: string;
+                        description?: string;
+                        Status?: string;
+                      }) => {
                         return (
-                          <tr key={(user as { id: string }).id}>
+                          <tr key={user.id}>
                             <td className="pl-12 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                              {(user as { id: string }).id}
+                              {user.id}
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                              {(user as { description: string }).description}
+                              {user.description}
                             </td>
-                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-green-500">
-                              {(user as { Status: string }).Status}
+                            <td
+                              className={`px-6 py-4 whitespace-no-wrap text-sm leading-5 ${getStatusClass(
+                                user.Status ?? '',
+                              )}`}
+                            >
+                              {user.Status}
                             </td>
                             <td className="pl-16 whitespace-no-wrap text-sm leading-7 text-red-500">
-                              <button onClick={() => alert('Click')}>
+                              <button
+                                onClick={() => handleDeleteService(user.id)}
+                              >
                                 <GoAlertFill />
                               </button>
                             </td>

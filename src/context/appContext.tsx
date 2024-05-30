@@ -1,13 +1,7 @@
 'use client';
 
 // context/appContext.tsx
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { registerRequest } from '@/utils/auth';
 
@@ -35,21 +29,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [services, setServices] = useState<any[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
-    const storedData = localStorage.getItem('data');
-    const storedIsAuth = localStorage.getItem('isAuth');
-    const storedServices = localStorage.getItem('services');
-    if (storedData) setData(JSON.parse(storedData));
-    if (storedIsAuth) setIsAuth(JSON.parse(storedIsAuth));
-    if (storedServices) setServices(JSON.parse(storedServices));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('data', JSON.stringify(data));
-    localStorage.setItem('isAuth', JSON.stringify(isAuth));
-    localStorage.setItem('services', JSON.stringify(services));
-  }, [data, isAuth, services]);
-
   const register = async (user: any) => {
     try {
       const response = await registerRequest(user);
@@ -58,7 +37,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setIsAuth(true);
         setTimeout(() => {
           router.push('/dashboard');
-        }, 500); // Espera 2 segundos antes de redirigir
+        }, 800); // Espera 2 segundos antes de redirigir
       }
     } catch (error) {
       console.error(error);

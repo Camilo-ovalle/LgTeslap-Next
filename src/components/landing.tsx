@@ -1,5 +1,6 @@
 'use client';
 import { FormEvent } from 'react';
+import { Toaster, toast } from 'sonner';
 import { useAppContext } from '@/context/appContext';
 import { GoTab } from 'react-icons/go';
 
@@ -17,6 +18,7 @@ function landing() {
       });
 
       console.log(res);
+      toast.success('Email sent');
     } catch (error) {
       console.error(error);
     }
@@ -24,6 +26,7 @@ function landing() {
 
   return (
     <div>
+      <Toaster position="top-center" richColors />
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
@@ -44,7 +47,7 @@ function landing() {
                 action=""
               >
                 <h3 className="mb-4 text-2xl font-semibold">
-                  Geta free test using your email
+                  Get a free test using your email
                 </h3>
                 <div className="flex items-center justify-center w-full rounded-full border border-gray-100 shadow dark:border-gray-600">
                   <input

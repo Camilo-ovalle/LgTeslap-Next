@@ -35,6 +35,9 @@ function Forms() {
 
   return (
     <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+      <h1 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white flex justify-center text-center">
+        Fill the form to join the wait list
+      </h1>
       {errors && (
         <div className="bg-red-500 text-yellow-50 mb-3 w-fit">{errors}</div>
       )}
