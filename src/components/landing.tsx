@@ -6,7 +6,6 @@ import { GoTab } from 'react-icons/go';
 
 function landing() {
   const { register } = useAppContext();
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
