@@ -1,39 +1,56 @@
 'use client';
+import React, { ReactNode } from 'react';
 
-import { Button, Modal } from 'flowbite-react';
-import { useState } from 'react';
+interface ModalProps {
+  show: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}
 
-export function Component() {
-  const [openModal, setOpenModal] = useState(true);
+const Modal: React.FC<ModalProps> = ({ show, onClose, title, children }) => {
+  if (!show) {
+    return null;
+  }
+
+  const handleClose = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClose();
+  };
 
   return (
-    <>
-      <Button onClick={() => setOpenModal(true)}>Toggle modal</Button>
-      <Modal show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>Terms of Service</Modal.Header>
-        <Modal.Body>
-          <div className="space-y-6">
-            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-              With less than a month to go before the European Union enacts new
-              consumer privacy laws for its citizens, companies around the world
-              are updating their terms of service agreements to comply.
-            </p>
-            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-              The European Union’s General Data Protection Regulation (G.D.P.R.)
-              goes into effect on May 25 and is meant to ensure a common set of
-              data rights in the European Union. It requires organizations to
-              notify users as soon as possible of high-risk data breaches that
-              could personally affect them.
-            </p>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => setOpenModal(false)}>I accept</Button>
-          <Button color="gray" onClick={() => setOpenModal(false)}>
-            Decline
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+      <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+        <div className="bg-gray-50 px-4 py-3 sm:px-6 flex justify-between items-center">
+          <h2 className="text-lg leading-6 font-medium text-gray-900">
+            {title}
+          </h2>
+          <button
+            onClick={handleClose}
+            className="text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+          >
+            <span className="sr-only">Close</span>
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M10 9l-6 6m0-6l6 6M4 4l6 6m-6 6l6-6"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="px-4 py-5 sm:p-6">{children}</div>
+        <div className="bg-gray-50 px-4 py-3 sm:px-6 flex justify-end">
+          <button
+            onClick={handleClose}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Modal;

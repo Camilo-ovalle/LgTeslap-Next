@@ -4,7 +4,7 @@ import { Toaster, toast } from 'sonner';
 import { useAppContext } from '@/context/appContext';
 import { GoTab } from 'react-icons/go';
 
-function landing() {
+function Landing() {
   const { register } = useAppContext();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,11 +33,10 @@ function landing() {
               LgTeslap Service manager
             </h2>
             <p className="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">
-              "LgTeslap" is a personalized transportation company based in
-              Bogotá that offers a comprehensive range of services for
-              transporting individuals. The company is in need of a tool to
-              assist in managing information related to their clients and
-              services.
+              LgTeslap is a personalized transportation company based in Bogotá
+              that offers a comprehensive range of services for transporting
+              individuals. The company is in need of a tool to assist in
+              managing information related to their clients and services.
             </p>
             <div className="flex items-center justify-center">
               <form
@@ -361,4 +360,4 @@ function landing() {
   );
 }
 
-export default landing;
+export default Landing;
